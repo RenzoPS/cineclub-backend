@@ -1,0 +1,41 @@
+package com.cineclub.entities;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@Entity(name = "screenings")
+@Table(uniqueConstraints = {
+    @UniqueConstraint(
+        name = "uk_screening_room_time",
+        columnNames = {"room_id", "start_time"}
+    )
+})
+public class Screening {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "movie_id", nullable = false)
+    private Movie movie;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "room_id", nullable = false)
+    private Room room;
+
+    @NotNull
+    @Column(nullable = false)
+    private LocalDateTime startTime;
+
+    @NotNull
+    @Column(nullable = false)
+    private LocalDateTime endTime;
+}

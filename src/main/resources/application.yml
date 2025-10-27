@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+# application:
+  # security:
+    # jwt:
+      # secret-key: ${JWT_SECRET_KEY}
+      # expiration: 86400000 # 1 day
+      # refresh-token:
+       # expiration: 604800000 # 7 days
+spring:
+  application:
+    name: CineClub Backend
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cineclub
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+      show-sql: true
