@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: ${SERVER_PORT}
 
 # application:
   # security:
@@ -13,9 +13,9 @@ spring:
     name: CineClub Backend
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/cineclub
-    username: postgres
-    password: postgres
+    url: ${POSTGRES_URL}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: create-drop

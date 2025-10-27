@@ -3,6 +3,10 @@ target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+seed_data.sh
+.env
+env.txt
+seed_data.sh
 
 ### STS ###
 .apt_generated
