@@ -38,9 +38,6 @@ public class ScreeningController {
                 .orElseThrow(() -> new RuntimeException("Movie not found")));
         screening.setRoom(roomService.findById(screeningDto.getRoomId())
                 .orElseThrow(() -> new RuntimeException("Room not found")));
-
-        // Calcular endTime
-        screening.setEndTime(screening.getStartTime().plusMinutes(screening.getMovie().getDuration()));
         
         screeningService.save(screening);
         return ResponseEntity.ok(screeningMapper.toDto(screening));

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -151,5 +152,53 @@ class RoomServiceTest {
         
         // Assert
         verify(roomRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    void saveGeneratesSeats(){
+        // Arrange
+        when(seatService.generateSeatsForRoom(any(Room.class)))
+            .thenReturn(List.of(new Seat()));
+        when(roomRepository.save(any(Room.class))).thenReturn(testRoom);
+
+        // Act
+        roomService.save(testRoom);
+
+        // Assert
+        verify(seatService, times(1)).generateSeatsForRoom(testRoom);
+    }
+
+    @Test
+    void updateCapacityRegeneratesSeats(){
+        // Arrange
+        Room updates = new Room();
+        updates.setNumber(1);
+        updates.setCapacity(20);
+        
+        when(roomRepository.findById(1L)).thenReturn(Optional.of(testRoom));
+        when(seatService.generateSeatsForRoom(any(Room.class)))
+            .thenReturn(List.of(new Seat()));
+
+        // Act
+        roomService.update(1L, updates);
+
+        // Assert
+        verify(seatService, times(1)).generateSeatsForRoom(testRoom);
+    }
+
+    @Test
+    void updateSameCapacityDoesNotRegenerateSeats(){
+        // Arrange
+        Room updates = new Room();
+        updates.setNumber(2);
+        updates.setCapacity(10);
+        
+        when(roomRepository.findById(1L)).thenReturn(Optional.of(testRoom));
+
+        // Act
+        roomService.update(1L, updates);
+
+        // Assert
+        verify(seatService, never()).generateSeatsForRoom(any(Room.class));
     }
 }

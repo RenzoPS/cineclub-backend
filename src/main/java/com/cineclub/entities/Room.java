@@ -16,17 +16,7 @@ public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotNull
-    @Min(value = 1)
-    @Max(value = 100)
-    @Column(unique = true)
     private Integer number;
-
-
-    @NotNull
-    @Min(value = 1)
-    @Max(value = 500)
     private Integer capacity;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)

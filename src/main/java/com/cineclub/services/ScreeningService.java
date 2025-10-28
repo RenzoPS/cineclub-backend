@@ -21,6 +21,16 @@ public class ScreeningService {
 
     @Transactional
     public Screening save(Screening screening) {
+        // Calcular endTime
+        screening.setEndTime(screening.getStartTime().plusMinutes(screening.getMovie().getDuration()));
+        
+        // Validar que no se solape con otra película en la misma sala
+        for (Screening s : screeningRepository.findByRoomId(screening.getRoom().getId())) {
+            if (screening.getStartTime().isBefore(s.getEndTime()) && screening.getEndTime().isAfter(s.getStartTime())) {
+                throw new RuntimeException("Hay otra película en ese horario");
+            }
+        }
+        
         return screeningRepository.save(screening);
     }
 
@@ -47,6 +57,7 @@ public class ScreeningService {
                 .orElseThrow(() -> new RuntimeException("Room not found")));
 
         screening.setStartTime(startTime);
+        screening.setEndTime(screening.getStartTime().plusMinutes(screening.getMovie().getDuration()));
 
         return screening;
     }
@@ -66,6 +77,7 @@ public class ScreeningService {
         }
         if (startTime != null) {
             screening.setStartTime(startTime);
+            screening.setEndTime(screening.getStartTime().plusMinutes(screening.getMovie().getDuration()));
         }
 
         return screening;

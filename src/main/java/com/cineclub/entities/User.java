@@ -18,18 +18,12 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotBlank
     private String name;
 
-    @NotBlank
     @Column(unique = true)
     private String email;
 
-    @NotBlank
     private String password;
-
-    @Column(nullable = false)
     private boolean isAdmin = false;
 
     @Override

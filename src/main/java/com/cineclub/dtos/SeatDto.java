@@ -22,6 +22,6 @@ public class SeatDto {
 
     @NotNull(message = "El número de asiento es obligatorio")
     @Min(value = 1, message = "El número de asiento debe ser al menos 1")
-    @Max(value = 50, message = "El número de asiento no puede exceder 50")
+    @Max(value = 10, message = "El número de asiento no puede exceder 10")
     private Integer seatNumber;
 }

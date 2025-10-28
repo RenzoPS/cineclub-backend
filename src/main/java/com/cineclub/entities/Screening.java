@@ -21,21 +21,14 @@ public class Screening {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
 
-    @NotNull
-    @Column(nullable = false)
     private LocalDateTime startTime;
-
-    @NotNull
-    @Column(nullable = false)
     private LocalDateTime endTime;
 }

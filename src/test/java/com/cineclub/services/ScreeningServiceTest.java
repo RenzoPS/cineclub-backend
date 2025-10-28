@@ -136,27 +136,28 @@ class ScreeningServiceTest {
         Movie updatedMovie = new Movie();
         updatedMovie.setId(2L);
         updatedMovie.setTitle("Updated Movie");
+        updatedMovie.setDuration(90);
 
         Room updatedRoom = new Room();
         updatedRoom.setId(2L);
         updatedRoom.setNumber(2);
 
         LocalDateTime updatedStartTime = LocalDateTime.of(2025, 10, 28, 20, 0);
-        LocalDateTime updatedEndTime = updatedStartTime.plusHours(2);
 
         when(screeningRepository.findById(1L)).thenReturn(Optional.of(testScreening));
         when(movieService.findById(2L)).thenReturn(Optional.of(updatedMovie));
         when(roomService.findById(2L)).thenReturn(Optional.of(updatedRoom));
 
         // Act
-        Screening result = screeningService.update(1L, 2L, 2L, updatedStartTime, updatedEndTime);
+        Screening result = screeningService.update(1L, 2L, 2L, updatedStartTime);
 
         // Assert
         assertNotNull(result);
         assertEquals(updatedMovie, result.getMovie());
         assertEquals(updatedRoom, result.getRoom());
         assertEquals(updatedStartTime, result.getStartTime());
-        assertEquals(updatedEndTime, result.getEndTime());
+        assertEquals(updatedStartTime.plusMinutes(90), result.getEndTime());
+        
         verify(screeningRepository, times(1)).findById(1L);
         verify(movieService, times(1)).findById(2L);
         verify(roomService, times(1)).findById(2L);
@@ -169,14 +170,13 @@ class ScreeningServiceTest {
         when(screeningRepository.findById(1L)).thenReturn(Optional.of(testScreening));
 
         // Act
-        Screening result = screeningService.partialUpdate(1L, null, null, updatedStartTime, null);
+        Screening result = screeningService.partialUpdate(1L, null, null, updatedStartTime);
 
         // Assert
         assertNotNull(result);
         assertEquals(testMovie, result.getMovie());
         assertEquals(testRoom, result.getRoom());
         assertEquals(updatedStartTime, result.getStartTime());
-        assertEquals(testEndTime, result.getEndTime());
         verify(screeningRepository, times(1)).findById(1L);
         verify(movieService, never()).findById(any());
         verify(roomService, never()).findById(any());
@@ -189,5 +189,56 @@ class ScreeningServiceTest {
 
         // Assert
         verify(screeningRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    void saveCalculatesEndTime() {
+        // Arrange
+        testScreening.setEndTime(null);
+        when(screeningRepository.findByRoomId(testRoom.getId()))
+            .thenReturn(java.util.List.of());
+        when(screeningRepository.save(any(Screening.class))).thenReturn(testScreening);
+
+        // Act
+        screeningService.save(testScreening);
+
+        // Assert
+        assertNotNull(testScreening.getEndTime());
+        assertEquals(testStartTime.plusMinutes(120), testScreening.getEndTime());
+    }
+
+    @Test
+    void saveWithOverlapThrowsException() {
+        // Arrange
+        Screening existing = new Screening();
+        existing.setStartTime(LocalDateTime.of(2025, 10, 27, 17, 0));
+        existing.setEndTime(LocalDateTime.of(2025, 10, 27, 19, 0));
+        existing.setRoom(testRoom);
+
+        when(screeningRepository.findByRoomId(testRoom.getId()))
+            .thenReturn(java.util.List.of(existing));
+
+        // Act & Assert
+        assertThrows(RuntimeException.class, () -> screeningService.save(testScreening));
+    }
+
+    @Test
+    void saveWithNoOverlapSucceeds() {
+        // Arrange
+        Screening existing = new Screening();
+        existing.setStartTime(LocalDateTime.of(2025, 10, 27, 14, 0));
+        existing.setEndTime(LocalDateTime.of(2025, 10, 27, 16, 0));
+        existing.setRoom(testRoom);
+
+        when(screeningRepository.findByRoomId(testRoom.getId()))
+            .thenReturn(java.util.List.of(existing));
+        when(screeningRepository.save(any(Screening.class))).thenReturn(testScreening);
+
+        // Act
+        Screening result = screeningService.save(testScreening);
+
+        // Assert
+        assertNotNull(result);
+        verify(screeningRepository, times(1)).save(testScreening);
     }
 }
