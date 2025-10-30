@@ -40,15 +40,15 @@ Crea un archivo `.env` en la raíz del proyecto con las siguientes variables:
 
 ```env
 # Puerto del servidor
-SERVER_PORT=tu_puerto_sv
+SERVER_PORT="tu_puerto_sv"
 
 # Configuración de PostgreSQL
-POSTGRES_USER=tu_usuario
-POSTGRES_PASSWORD=tu_contraseña
-POSTGRES_DB=tu_db
-POSTGRES_PORT=tu_puerto_db
-POSTGRES_URL=tu_url
-# JWT=tu_secret_token (DESHABILITADO)
+POSTGRES_USER="tu_usuario"
+POSTGRES_PASSWORD="tu_contraseña"
+POSTGRES_DB="tu_db"
+POSTGRES_PORT="tu_puerto_db"
+POSTGRES_URL="tu_url"
+# JWT="tu_secret_token" (DESHABILITADO)
 
 ```
 ### Descripción de Variables
@@ -72,7 +72,7 @@ POSTGRES_URL=tu_url
 
 2. **Configura las variables de entorno**
    ```bash
-   #Editar archivo .env previamente creado
+   # Editar archivo .env previamente creado
    ```
 
 3. **Inicia la base de datos con Docker**
@@ -108,7 +108,7 @@ http://localhost:8080/swagger-ui/index.html
 
 ```
 src/main/java/com/cineclub/
-├── controllers/     # Controladores REST
+├── controllers/    # Controladores REST
 ├── dtos/           # Data Transfer Objects
 ├── entities/       # Entidades JPA (Movie, Room, Screening, Seat, User)
 ├── mappers/        # Mappers de MapStruct
