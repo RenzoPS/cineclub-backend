@@ -6,7 +6,6 @@ target/
 seed_data.sh
 .env
 env.txt
-seed_data.sh
 
 ### STS ###
 .apt_generated

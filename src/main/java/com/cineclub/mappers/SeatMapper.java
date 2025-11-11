@@ -11,6 +11,8 @@ public interface SeatMapper {
     @Mapping(source = "room.id", target = "roomId")
     SeatDto toDto(Seat seat);
     
+    java.util.List<SeatDto> toDtoList(java.util.List<Seat> seats);
+    
     Seat toEntity(SeatDto seatDto);
 
 }

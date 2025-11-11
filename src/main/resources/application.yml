@@ -8,6 +8,12 @@ server:
       # expiration: 86400000 # 1 day
       # refresh-token:
        # expiration: 604800000 # 7 days
+
+# Configuración de holds
+hold:
+  ttl:
+    minutes: 10  # Tiempo de retención de asientos en minutos
+
 spring:
   application:
     name: CineClub Backend

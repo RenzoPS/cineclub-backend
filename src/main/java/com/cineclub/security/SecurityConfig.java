@@ -33,6 +33,12 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/movies/search").hasAnyRole("USER", "ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/screenings/search").hasAnyRole("USER", "ADMIN")
                 
+                // Endpoints de holds y tickets para usuarios autenticados
+                .requestMatchers(HttpMethod.POST, "/api/screenings/*/holds").hasAnyRole("USER", "ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/tickets/*/confirm").hasAnyRole("USER", "ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/tickets/*").hasAnyRole("USER", "ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/me/tickets").hasAnyRole("USER", "ADMIN")
+                
                 // POST, PUT, PATCH, DELETE solo para ADMIN
                 .requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN")

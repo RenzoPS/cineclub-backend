@@ -1,6 +1,7 @@
 package com.cineclub.services;
 
 import com.cineclub.entities.Room;
+import com.cineclub.entities.Screening;
 import com.cineclub.entities.Seat;
 import com.cineclub.repositories.SeatRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.data.domain.Pageable.unpaged;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +27,10 @@ public class SeatService {
     public Page<Seat> findByRoomIdAndRowLetter(Long roomId, String rowLetter, Pageable pageable) {
         return seatRepository.findByRoomIdAndRowLetter(roomId, rowLetter, pageable);
     }
+    
+    public Page<Seat> getSeatsForScreening(Screening screening, Pageable pageable) {
+        return seatRepository.findByRoomId(screening.getRoom().getId(), pageable);
+    }
 
     @Transactional
     public List<Seat> generateSeatsForRoom(Room room){
@@ -36,10 +43,12 @@ public class SeatService {
             seat.setRoom(room);
             seat.setRowLetter(getRowLetter(i / seatsPerRow));
             seat.setSeatNumber((i % seatsPerRow) + 1);
+            seat.setIsAvailable(true);
             seats.add(seat);
         }
         
-        return seats;
+        // Guardar todos los asientos en la BD
+        return seatRepository.saveAll(seats);
     }
 
     private String getRowLetter(int index) {

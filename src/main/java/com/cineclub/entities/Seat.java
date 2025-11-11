@@ -28,4 +28,7 @@ public class Seat {
 
     @Column(name = "seat_number", nullable = false)
     private Integer seatNumber;
+
+    @Column(name = "is_available", nullable = false)
+    private Boolean isAvailable;
 }

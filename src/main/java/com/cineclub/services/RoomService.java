@@ -21,9 +21,14 @@ public class RoomService {
 
     @Transactional
     public Room save(Room room){
+        // Primero guardar la sala para obtener el ID
+        room = roomRepository.save(room);
+        
+        // Luego generar y guardar los asientos
         List<Seat> seats = seatService.generateSeatsForRoom(room);
         room.setSeats(seats);
-        return roomRepository.save(room);
+        
+        return room;
     }
 
     public Page<Room> findAll(Pageable pageable){
