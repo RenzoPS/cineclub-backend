@@ -21,4 +21,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     
     // Buscar tickets RESERVED de un screening y asientos específicos
     List<Ticket> findByScreeningIdAndSeatIdInAndStatus(Long screeningId, List<Long> seatIds, TicketStatus status);
+
+    // Consultar existencia por hold y estado
+    boolean existsByHoldIdAndStatus(Long holdId, TicketStatus status);
 }

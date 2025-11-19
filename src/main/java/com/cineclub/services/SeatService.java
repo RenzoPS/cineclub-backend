@@ -29,7 +29,7 @@ public class SeatService {
     }
     
     public Page<Seat> getSeatsForScreening(Screening screening, Pageable pageable) {
-        return seatRepository.findByRoomId(screening.getRoom().getId(), pageable);
+        return seatRepository.findByRoomIdAndIsAvailable(screening.getRoom().getId(), true, pageable);
     }
 
     @Transactional
@@ -61,3 +61,4 @@ public class SeatService {
     }
 
 }
+

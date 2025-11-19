@@ -1,12 +1,10 @@
 package com.cineclub.controllers;
 
-import com.cineclub.dtos.ConfirmHoldDto;
 import com.cineclub.dtos.TicketDto;
 import com.cineclub.entities.Ticket;
 import com.cineclub.entities.User;
 import com.cineclub.mappers.TicketMapper;
 import com.cineclub.services.TicketService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,10 +23,9 @@ public class TicketController {
     @PostMapping("/tickets/{ticketId}/confirm")
     public ResponseEntity<TicketDto> confirmTicket(
             @PathVariable Long ticketId,
-            @Valid @RequestBody ConfirmHoldDto confirmDto,
             @AuthenticationPrincipal User user) {
         
-        Ticket ticket = ticketService.confirmTicket(ticketId, confirmDto.getPricePerTicket(), user);
+        Ticket ticket = ticketService.confirmTicket(ticketId, user);
         return ResponseEntity.ok(ticketMapper.toDto(ticket));
     }
 

@@ -127,4 +127,18 @@ public class HoldService {
         hold.setStatus(HoldStatus.EXPIRED);
         holdRepository.save(hold);
     }
+
+    public void updateHoldStatus(Hold hold) {
+        var now = LocalDateTime.now();
+        Long holdId = hold.getId();
+
+        boolean anyReserved = ticketRepository.existsByHoldIdAndStatus(holdId, TicketStatus.RESERVED);
+
+        if (anyReserved) {
+            hold.setStatus(now.isBefore(hold.getExpiresAt()) ? HoldStatus.ACTIVE : HoldStatus.EXPIRED);
+        } else {
+            hold.setStatus(HoldStatus.CLOSED);
+        }
+        holdRepository.save(hold);
+    }
 }

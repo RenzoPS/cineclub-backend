@@ -5,13 +5,15 @@ import com.cineclub.entities.Seat;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface SeatMapper {
     
     @Mapping(source = "room.id", target = "roomId")
     SeatDto toDto(Seat seat);
     
-    java.util.List<SeatDto> toDtoList(java.util.List<Seat> seats);
+    List<SeatDto> toDtoList(List<Seat> seats);
     
     Seat toEntity(SeatDto seatDto);
 
