@@ -79,6 +79,7 @@ class SeatServiceTest {
         Room room = new Room();
         room.setId(1L);
         room.setCapacity(25);
+        when(seatRepository.saveAll(anyList())).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Act
         List<Seat> result = seatService.generateSeatsForRoom(room);
@@ -86,6 +87,7 @@ class SeatServiceTest {
         // Assert
         assertNotNull(result);
         assertEquals(25, result.size());
+
         
         // Verify first seat (A1)
         Seat firstSeat = result.get(0);
